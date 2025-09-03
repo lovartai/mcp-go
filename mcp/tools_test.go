@@ -101,20 +101,24 @@ func TestUnmarshalToolWithRawSchema(t *testing.T) {
 	// Verify tool properties
 	assert.Equal(t, tool.Name, toolUnmarshalled.Name)
 	assert.Equal(t, tool.Description, toolUnmarshalled.Description)
-
-	// Verify schema was properly included
 	assert.Equal(t, "object", toolUnmarshalled.InputSchema.Type)
-	assert.Contains(t, toolUnmarshalled.InputSchema.Properties, "query")
-	assert.Subset(t, toolUnmarshalled.InputSchema.Properties["query"], map[string]any{
-		"type":        "string",
-		"description": "Search query",
-	})
-	assert.Contains(t, toolUnmarshalled.InputSchema.Properties, "limit")
-	assert.Subset(t, toolUnmarshalled.InputSchema.Properties["limit"], map[string]any{
-		"type":    "integer",
-		"minimum": 1.0,
-		"maximum": 50.0,
-	})
+	if qVal, ok := toolUnmarshalled.InputSchema.Properties.Get("query"); ok {
+		assert.Subset(t, qVal.(map[string]any), map[string]any{
+			"type":        "string",
+			"description": "Search query",
+		})
+	} else {
+		assert.Fail(t, "query property not found")
+	}
+	if lVal, ok := toolUnmarshalled.InputSchema.Properties.Get("limit"); ok {
+		assert.Subset(t, lVal.(map[string]any), map[string]any{
+			"type":    "integer",
+			"minimum": 1.0,
+			"maximum": 50.0,
+		})
+	} else {
+		assert.Fail(t, "limit property not found")
+	}
 	assert.Subset(t, toolUnmarshalled.InputSchema.Required, []string{"query"})
 }
 
@@ -136,10 +140,14 @@ func TestUnmarshalToolWithoutRawSchema(t *testing.T) {
 	// Verify tool properties
 	assert.Equal(t, tool.Name, toolUnmarshalled.Name)
 	assert.Equal(t, tool.Description, toolUnmarshalled.Description)
-	assert.Subset(t, toolUnmarshalled.InputSchema.Properties["input"], map[string]any{
-		"type":        "string",
-		"description": "Test input",
-	})
+	if inVal, ok := toolUnmarshalled.InputSchema.Properties.Get("input"); ok {
+		assert.Subset(t, inVal.(map[string]any), map[string]any{
+			"type":        "string",
+			"description": "Test input",
+		})
+	} else {
+		assert.Fail(t, "input property not found")
+	}
 	assert.Empty(t, toolUnmarshalled.InputSchema.Required)
 	assert.Empty(t, toolUnmarshalled.RawInputSchema)
 }

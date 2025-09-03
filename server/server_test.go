@@ -15,6 +15,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	orderedmap "github.com/wk8/go-ordered-map/v2"
 )
 
 func TestMCPServer_NewMCPServer(t *testing.T) {
@@ -1362,7 +1363,7 @@ func TestMCPServer_HandleUndefinedHandlers(t *testing.T) {
 		Description: "Test tool",
 		InputSchema: mcp.ToolInputSchema{
 			Type:       "object",
-			Properties: map[string]any{},
+			Properties: orderedmap.New[string, any](),
 		},
 		Annotations: mcp.ToolAnnotation{
 			Title:           "test-tool",

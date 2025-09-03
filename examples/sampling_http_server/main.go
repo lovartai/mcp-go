@@ -8,6 +8,7 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	orderedmap "github.com/wk8/go-ordered-map/v2"
 )
 
 func main() {
@@ -23,16 +24,18 @@ func main() {
 		Description: "Ask the LLM a question using sampling over HTTP",
 		InputSchema: mcp.ToolInputSchema{
 			Type: "object",
-			Properties: map[string]any{
-				"question": map[string]any{
+			Properties: func() *orderedmap.OrderedMap[string, any] {
+				m := orderedmap.New[string, any]()
+				m.Set("question", map[string]any{
 					"type":        "string",
 					"description": "The question to ask the LLM",
-				},
-				"system_prompt": map[string]any{
+				})
+				m.Set("system_prompt", map[string]any{
 					"type":        "string",
 					"description": "Optional system prompt to provide context",
-				},
-			},
+				})
+				return m
+			}(),
 			Required: []string{"question"},
 		},
 	}, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
@@ -105,12 +108,14 @@ func main() {
 		Description: "Echo back the input message",
 		InputSchema: mcp.ToolInputSchema{
 			Type: "object",
-			Properties: map[string]any{
-				"message": map[string]any{
+			Properties: func() *orderedmap.OrderedMap[string, any] {
+				m := orderedmap.New[string, any]()
+				m.Set("message", map[string]any{
 					"type":        "string",
 					"description": "The message to echo back",
-				},
-			},
+				})
+				return m
+			}(),
 			Required: []string{"message"},
 		},
 	}, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {

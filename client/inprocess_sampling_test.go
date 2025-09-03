@@ -6,6 +6,7 @@ import (
 
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
+	orderedmap "github.com/wk8/go-ordered-map/v2"
 )
 
 // MockSamplingHandler implements SamplingHandler for testing
@@ -36,12 +37,14 @@ func TestInProcessSampling(t *testing.T) {
 		Description: "Test sampling functionality",
 		InputSchema: mcp.ToolInputSchema{
 			Type: "object",
-			Properties: map[string]any{
-				"message": map[string]any{
+			Properties: func() *orderedmap.OrderedMap[string, any] {
+				m := orderedmap.New[string, any]()
+				m.Set("message", map[string]any{
 					"type":        "string",
 					"description": "Message to send to LLM",
-				},
-			},
+				})
+				return m
+			}(),
 			Required: []string{"message"},
 		},
 	}, func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {

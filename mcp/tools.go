@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/invopop/jsonschema"
+	orderedmap "github.com/wk8/go-ordered-map/v2"
 )
 
 var errToolSchemaConflict = errors.New("provide either InputSchema or RawInputSchema, not both")
@@ -618,10 +619,10 @@ func (t Tool) MarshalJSON() ([]byte, error) {
 
 // ToolArgumentsSchema represents a JSON Schema for tool arguments.
 type ToolArgumentsSchema struct {
-	Defs       map[string]any `json:"$defs,omitempty"`
-	Type       string         `json:"type"`
-	Properties map[string]any `json:"properties,omitempty"`
-	Required   []string       `json:"required,omitempty"`
+	Defs       map[string]any                      `json:"$defs,omitempty"`
+	Type       string                              `json:"type"`
+	Properties *orderedmap.OrderedMap[string, any] `json:"properties,omitempty"`
+	Required   []string                            `json:"required,omitempty"`
 }
 
 type ToolInputSchema ToolArgumentsSchema // For retro-compatibility
@@ -681,7 +682,7 @@ func NewTool(name string, opts ...ToolOption) Tool {
 		Name: name,
 		InputSchema: ToolInputSchema{
 			Type:       "object",
-			Properties: make(map[string]any),
+			Properties: orderedmap.New[string, any](),
 			Required:   nil, // Will be omitted from JSON if empty
 		},
 		Annotations: ToolAnnotation{
@@ -1015,7 +1016,7 @@ func WithBoolean(name string, opts ...PropertyOption) ToolOption {
 			t.InputSchema.Required = append(t.InputSchema.Required, name)
 		}
 
-		t.InputSchema.Properties[name] = schema
+		t.InputSchema.Properties.Set(name, schema)
 	}
 }
 
@@ -1037,7 +1038,7 @@ func WithNumber(name string, opts ...PropertyOption) ToolOption {
 			t.InputSchema.Required = append(t.InputSchema.Required, name)
 		}
 
-		t.InputSchema.Properties[name] = schema
+		t.InputSchema.Properties.Set(name, schema)
 	}
 }
 
@@ -1059,7 +1060,7 @@ func WithString(name string, opts ...PropertyOption) ToolOption {
 			t.InputSchema.Required = append(t.InputSchema.Required, name)
 		}
 
-		t.InputSchema.Properties[name] = schema
+		t.InputSchema.Properties.Set(name, schema)
 	}
 }
 
@@ -1082,7 +1083,7 @@ func WithObject(name string, opts ...PropertyOption) ToolOption {
 			t.InputSchema.Required = append(t.InputSchema.Required, name)
 		}
 
-		t.InputSchema.Properties[name] = schema
+		t.InputSchema.Properties.Set(name, schema)
 	}
 }
 
@@ -1104,7 +1105,7 @@ func WithArray(name string, opts ...PropertyOption) ToolOption {
 			t.InputSchema.Required = append(t.InputSchema.Required, name)
 		}
 
-		t.InputSchema.Properties[name] = schema
+		t.InputSchema.Properties.Set(name, schema)
 	}
 }
 
