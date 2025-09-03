@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/lovartai/mcp-go/mcp"
 )
 
 func TestStdioServer(t *testing.T) {

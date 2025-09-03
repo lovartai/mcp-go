@@ -10,10 +10,10 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/mark3labs/mcp-go/client"
-	"github.com/mark3labs/mcp-go/client/transport"
-	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
+	"github.com/lovartai/mcp-go/client"
+	"github.com/lovartai/mcp-go/client/transport"
+	"github.com/lovartai/mcp-go/mcp"
+	"github.com/lovartai/mcp-go/server"
 )
 
 // Server encapsulates an MCP server and manages resources like pipes and context.

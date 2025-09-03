@@ -9,9 +9,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/mark3labs/mcp-go/client"
-	"github.com/mark3labs/mcp-go/client/transport"
-	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/lovartai/mcp-go/client"
+	"github.com/lovartai/mcp-go/client/transport"
+	"github.com/lovartai/mcp-go/mcp"
 )
 
 func main() {

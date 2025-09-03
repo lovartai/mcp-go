@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/mark3labs/mcp-go/client"
-	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
+	"github.com/lovartai/mcp-go/client"
+	"github.com/lovartai/mcp-go/mcp"
+	"github.com/lovartai/mcp-go/server"
 	orderedmap "github.com/wk8/go-ordered-map/v2"
 )
 
